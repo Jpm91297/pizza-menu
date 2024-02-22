@@ -69,19 +69,15 @@ function Menu({ pizzaData }) {
   return (
     <main className="menu">
       <h2>Our Menu</h2>
+      <p>Authentic Italian Cuisine</p>
       <ul className="pizzas">
-        {pizzaData.map((pizza, index) => {
-          const { name, ingredients, price, photoName, soldOut } = pizza;
-          return (
-            <Pizza
-              key={index}
-              name={name}
-              ingredients={ingredients}
-              photo={photoName}
-              price={price}
-            />
-          );
-        })}
+        {pizzaData.length > 0 ? (
+          pizzaData.map((pizza, index) => {
+            return <Pizza key={index} pizza={pizza} />;
+          })
+        ) : (
+          <p>We're still working on our menu.</p>
+        )}
       </ul>
     </main>
   );
@@ -95,22 +91,28 @@ function Footer() {
 
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()} We're currently{" "}
-      {isOpen ? "open" : "closed"}!
+      {isOpen ? (
+        <div className="order">
+          <p>We're open until {closeHour}:00. Come visit us or order online.</p>
+          <button className="btn">Order</button>
+        </div>
+      ) : (
+        <p>We are closed</p>
+      )}
     </footer>
   );
 }
 
-function Pizza(props) {
-  const { name, ingredients, photo, price } = props;
+function Pizza({ pizza }) {
+  const { name, ingredients, photoName, price, soldOut } = pizza;
 
   return (
-    <li className="pizza">
-      <img src={photo} alt="cool" />
+    <li className={`pizza ${soldOut && "sold-out"}`}>
+      <img src={photoName} alt="cool" />
       <div>
         <h2>{name}</h2>
         <p>{ingredients}</p>
-        <span>{price}</span>
+        <span>{!soldOut ? price : "SOLD OUT"}</span>
       </div>
     </li>
   );
